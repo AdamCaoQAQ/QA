@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>问答项目--注册</title>
+		<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css"/>
+		<script src="libs/jquery/jquery.min.js"></script>
+		<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-title">
+					<span id="goBack" class="glyphicon glyphicon-chevron-left pull-left"></span>
+					<span>注册</span>
+				</div>
+			</div>
+		</nav>
+		<div class="container">
+			<form action="#" method="post" role="form">
+				<div class="form-group">
+					<!--中文、英文、数字包括下划线：^[\u4E00-\u9FA5A-Za-z0-9_]+$-->
+					<input type="text" class="form-control" name="userName" id="userName" placeholder="请输入用户名" required pattern="^[\u4E00-\u9FA5A-Za-z0-9_]+$" />
+				</div>
+				<div class="form-group">
+					<!--中文、英文、数字包括下划线：^[\u4E00-\u9FA5A-Za-z0-9_]+$-->
+					<input type="password" class="form-control" name="psw" id="psw" placeholder="请输入密码" required pattern="^[A-Za-z0-9_]+$" />
+				</div>
+				<div class="form-group">
+					<!--中文、英文、数字包括下划线：^[\u4E00-\u9FA5A-Za-z0-9_]+$-->
+					<input type="password" class="form-control" name="psw" id="psw" placeholder="再次输入密码" required pattern="^[A-Za-z0-9_]+$" />
+				</div>
+				<div class="form-group">
+					<!--中文、英文、数字包括下划线：^[\u4E00-\u9FA5A-Za-z0-9_]+$-->
+					<input type="email" class="form-control" name="email" id="email" placeholder="输入邮箱" required />
+				</div>
+				<div class="form-group">
+					<label for="sex">男<input type="radio" name="sex" value="boy" checked></label>
+					<label for="sex">女<input type="radio" name="sex" value="girl"></label>
+				</div>
+				<div class="form-group">
+					<select class="form-control" name="lesson">
+						<option value="HTML">HTML</option>
+						<option value="CSS">CSS</option>
+						<option value="JS">JS</option>
+					</select>
+				</div>
+				<input type="submit" class="form-control btn btn-success" value="提交"/>
+			</form>
+		</div>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">问答项目--注册</h4>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+		<script type="text/javascript">
+			$("#goBack").click(function(){
+				history.back();
+			});
+			document.forms[0].onsubmit = function (e) {
+				e.preventDefault();
+				var tempPsw = [];
+				$(":password").each(function () {
+					tempPsw.push($(this).val());
+				});
+				if(tempPsw[0] != tempPsw[1]){
+					$("#myModal").modal("show").find(".modal-body").text("两次密码输入的不一致,请确认后重新提交。");
+				}
+				console.log("123");
+				//获取表单数据，并序列化为formdata格式的数据对象
+				// var data = new FormData(this);
+				//
+				// console.log(data);
+				//使用jQuery发送请求，假如数据数据是从form表单内获取，则需要使用这种方式获取表单数据。它代表把表单内的数据序列化为请求体数据格式:userName=xx&psw=123456&...。
+				var data = $(this).serialize();
+
+				console.log(data);
+				sendToRgister(data);
+			}
+			function sendToRgister(data) {
+				$.post("/user/register", data, function(response, statusText, xhr) {
+					if(response.result == 0) {
+					//注册失败
+					$("#myModal").modal("show").find(".modal-body").text("注册失败,请稍后重试!")
+					} else {
+						//注册成功
+						$("#myModal").modal("show").find(".modal-body").text("恭喜你,注册成功!")
+						//跳转登录页面
+						$("#myModal").on("hidden.bs.modal", function() {
+							location.href = "/login.html";
+						});
+					}
+
+				});
+			}
+
+		</script>
+	</body>
+</html>

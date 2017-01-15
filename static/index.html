@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>主页</title>
+		<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css"/>
+		<script src="libs/jquery/jquery.min.js"></script>
+		<script src="libs/jQuery/jquery.cookie.js"></script>
+		<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+		<script src="libs/artTemplate/template.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/all.css"/>
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container dropdown">
+				 <div class="navbar-header">
+        			<a class="navbar-brand" href="#">亚当的白宫</a>
+   			 	</div>
+   			 	<div class="navbar-text pull-right">
+   			 		<span>
+   			 			<span class="glyphicon glyphicon-plus"></span>
+   			 			<span id="goToAsk">提问</span>
+   			 		</span>
+
+   			 		&#x3000;
+
+   			 		<span id="goLogin" class="dropdown-toggle" data-toggle= "dropdown">
+   			 			<span class="glyphicon glyphicon-user"></span>
+   			 			<span id="userName">登录</span>
+   			 		</span>
+
+   			 		<ul class="dropdown-menu">
+   			 			<li class="text-right" id="user">
+   			 				<a >
+   			 					<span class="glyphicon glyphicon-user"></span>
+   			 					<span>个人资料</span>
+   			 				</a>
+   			 			</li>
+   			 			<li class="divider"></li>
+   			 			<li class="text-right" id="logout">
+							<a >
+								<span class="glyphicon glyphicon-log-out"></span>
+								<span>退出登录</span>
+							</a>
+   			 			</li>
+   			 		</ul>
+   			 	</div>
+			</div>
+		</nav>
+		<div class="container" id="allMsg">
+			<!-- <section>
+				<div class="avatar"></div>
+				<span class="userName">Adam</span>
+				<div class="contentBox">
+					<p class="content">this is a test</p>
+					<span class="date">time</span>
+					<span class="ip">ip</span>
+				</div>
+				<div class="userInput">
+					<textarea name="comment" rows="8" cols="80"></textarea>
+					<div class="">回复</div>
+				</div>
+			</section> -->
+			<!-- TODO: 定义artTemplate模版 -->
+			<script type="text/html" id="myTemplate">
+				{{each data as aData}}
+					<section class="userState">
+						<div class="avatar" style="background-image: url(avatar/{{aData.userName}}.jpg);"></div>
+						<span class="userName">{{aData.userName}}</span>
+						<div class="contentBox">
+							<p class="content">{{aData.content}}</p>
+							<span class="date">{{aData.date}}</span>
+							<span class="ip">{{aData.ip}}</span>
+						</div>
+						{{include "commentTemplate" aData}}
+						<div class="userInput">
+							<textarea name="comment" rows="8" cols="80"></textarea>
+							<div class="sendMsg">回复</div>
+						</div>
+					</section>
+				{{/each}}
+			</script>
+			<!--评论子模板-->
+			<script type="text/html" id="commentTemplate">
+				{{each reply as aReply}}
+					<section class="commentState">
+						<div class="comment-avatar" style="background-image: url(avatar/{{aReply.userName}}.jpg);"></div>
+						<span class="comment-userName">{{aReply.userName}}</span>
+						<div class="comment-contentBox">
+							<p class="comment-content">{{aReply.content}}</p>
+							<span class="comment-date">{{aReply.date}}</span> 						&#x3000;&#x3000;&#x3000;
+							<span class="comment-ip">{{aReply.ip}}</span>
+						</div>
+					</section>
+				{{/each}}
+			</script>
+		</div>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">问答项目--主页</h4>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+	</body>
+	<script type="text/javascript">
+
+	//获取cookie缓存的userName属性值
+	//$.cookie()是jQuery提供的操作cookie的方法(注意需要使用jQuery的cookie插件:jquery.cookie.js)
+	var userName = $.cookie("userName");
+	// console.log(">>>>>>>>>>>>>>>>>>>>" + userName);
+	//判断是否有该cookie，来决定用户当前是否处于登录状态
+	if(userName){
+		// console.log("yes");
+		$("#userName").text(userName);
+	}
+	else{
+		$(".dropdown-menu").remove();
+	}
+	//alert(userName)
+	//提问按钮点击
+	$("#goToAsk").click(function(){
+		if(userName){
+			//去提问页面
+			location.href = "/ask.html";
+		}
+		else{
+			location.href = "/login.html";
+		}
+	});
+	//登录按钮点击
+	$("#goLogin").click(function(){
+		console.log("123");
+		if(!userName){
+			location.href = "/login.html";
+		}
+	});
+
+	$("#logout").click(function () {
+		$.get("/user/logout", function (response, statusText, xhr) {
+			if(response.result == 1){
+				$("#myModal").modal("show").find(".modal-body").text("退出成功!");
+				$('#myModal').on('hide.bs.modal',function() {
+					// 			alert('嘿，我听说您喜欢模态框...');
+					// window.location.reload();
+					location.href = "/login.html";
+   				});
+			}
+		});
+	});
+
+	$("#user").click(function(){
+		// console.log("123");
+		if(userName){
+			location.href = "/user.html";
+		}else{
+			location.href = "/login.html";
+		}
+	});
+
+	$("body").delegate(".sendMsg","click",function () {
+		console.log("123456");
+		// console.log(userName);
+		if(!userName){
+			location.href = "/login.html";
+		}
+		var content = $(this).siblings("textArea").val();
+		if (content == "") {
+			$("#myModal").modal("show").find(".modal-body").text("评论内容不能为空!");
+			return;
+		}
+		content = content.replace(/</, "&lt;");
+		content = content.replace(/>/, "&gt;");
+		var time = $(this).parents(".userState").find(".date").html();
+		var data ={
+			userName,
+			content,
+			time
+		};
+		$.post("/user/reply", data, function (response, statusText, xhr) {
+			if(response.result ==0){
+				$("#myModal").modal("show").find(".modal-body").text("回复失败!");
+			}else {
+				$("#myModal").modal("show").find(".modal-body").text("恭喜你,回复成功!");
+				$('#myModal').on('hide.bs.modal',function() {
+					// 			alert('嘿，我听说您喜欢模态框...');
+					window.location.reload();
+   				});
+			}
+		});
+	});
+
+	$(function(){
+		//获取所有提问
+		$.get('/getAllQuestion',function(response,statusText,xhr){
+			//alert(response.data)
+			var html =  template("myTemplate", response);
+			$("#allMsg").get(0).innerHTML = html;
+			//document.querySelector('#contentBox').innerHTML = html
+		});
+	});
+
+	</script>
+</html>

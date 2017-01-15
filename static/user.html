@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css"/>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <script src="libs/jQuery/jquery.cookie.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/all.css"/>
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-title">
+                <span id="goBack" class="glyphicon glyphicon-chevron-left pull-left"></span>
+                <span>个人资料</span>
+            </div>
+        </div>
+    </nav>
+    <div class="avatarBox">
+        <span>+</span>
+        <input type="file" name="avatar" value="avatar" accept="image/jpeg image/x-png">
+    </div>
+    <button id="sendAvatar" class="btn btn-success" type="button" name="button">提交</button>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">问答项目--注册</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</body>
+<script type="text/javascript">
+    var uploadFile;
+    $("#goBack").click(function () {
+        history.back();
+    });
+    $("#avatarBox").bind("drop",function(e){
+
+    	//e.stopPropagation可以防止在新的页面打开图片文件
+    	e.stopPropagation();
+    	//alert('松手了')
+    	//从drop事件中获取拖拽的文件
+    	var files = e.originalEvent.dataTransfer.files;
+
+    	uploadFile = files[0];
+
+    	checkFileype();
+    })
+    $("input[type=file]").change(function () {
+        var files = this.files;
+        uploadFile = files[0];
+        checkFileType();
+    });
+    // 检查文件是否是图片文件
+    function checkFileType() {
+        if(!/image\/\w+/g.test(uploadFile.type)){
+            // $('#myModal').modal('show').find('.modal-body').text('请选取格式为jpg/png的图片文件');
+            $("#myModal").modal("show").find(".modal-body").text("请选取格式为jpg/png的图片文件");
+		    $("#sendAvatar").hide();
+		    return;
+        }else{
+            $("#sendAvatar").show();
+        }
+
+        if(typeof(FileReader) == undefined){
+
+    		$('#myModal').modal('show').find('.modal-body').text('当前浏览器不支持!请升级浏览器版本为最新版本.')
+
+    		return
+    	}
+
+        //fileReader是系统提供的一个文件读取器
+    	var fileReader = new FileReader();
+    	//onload()是文件读取器读取文件成功后调用的方法(即readAs...方法调用后触发的方法)
+    	fileReader.onload = function(){
+    		//fileReader.result获取读取后的结果
+    		$(".avatarBox").css("background-image","url("+fileReader.result + ")").find("span").text("");
+    	};
+    	//该方法readAsDataURL()是把某一个文件读取为文件地址
+    	fileReader.readAsDataURL(uploadFile);
+    }
+
+    $("#sendAvatar").click(function(){
+    	var data = new FormData();
+    	data.append("avatar",uploadFile);
+    	var xhr = new XMLHttpRequest();
+    	xhr.onreadystatechange = function(){
+    		if(xhr.readyState == 4){
+    			var response = JSON.parse(xhr.responseText);
+    			// $('#myModal').modal('show').find('.modal-body').text(response.msg);
+                $("#myModal").modal("show").find(".modal-body").text(response.msg);
+    			if(response.result == 1){
+    				$("#myModal").on("hidden.bs.modal",function(){
+    					location.href = "/";
+    				});
+    			}
+    		}
+    	}
+    	xhr.open("POST","/user/uploadAvatar");
+    	xhr.send(data);
+    });
+</script>
+</html>

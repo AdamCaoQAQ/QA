@@ -1,0 +1,70 @@
+
+body{
+	padding-top: 70px;
+}
+.navbar-title{
+	text-align: center;
+	color: #9D9D9D;
+	line-height: 20px;
+	font-size: 16px;
+	padding: 15px 0;
+}
+
+.avatar{
+	display: inline-block;
+	width: 5rem;
+	height: 5rem;
+	border-radius: 50%;
+	border: 1px solid red;
+	/*background-image: url("../img/1.jpg");*/
+	background-size: contain;
+	background-position: center;
+}
+
+.userName{
+	display: inline-block;
+	height: 5rem;
+	line-height: 5rem;
+	font-size: 3rem;
+	font-weight: bold;
+	vertical-align: bottom;
+	padding-left: 1rem;
+}
+
+.content-box{
+
+}
+
+.avatarBox{
+	width: 30rem;
+	height: 30rem;
+	margin: 10rem auto;
+	margin-bottom: 1rem;
+	background-color: lightgray;
+	text-align: center;
+	line-height: 30rem;
+	font-size: 5rem;
+	color: gray;
+	position: relative;
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.avatarBox input{
+	height: 30rem;
+	width: 30rem;
+	opacity: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+	/*float: left;*/
+}
+
+#sendAvatar{
+	display: block;
+	height: 5rem;
+	width: 30rem;
+	margin: 0 auto;
+	font-size: 2rem;
+}
