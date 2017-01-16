@@ -1,6 +1,7 @@
 
 body{
 	padding-top: 70px;
+	font-family: "Microsoft YaHei";
 }
 .navbar-title{
 	text-align: center;
@@ -10,12 +11,19 @@ body{
 	padding: 15px 0;
 }
 
+.userState{
+	width: 100%;
+	border: 1px solid gray;
+	padding: 1rem;
+	margin-bottom: 1rem;
+}
+
 .avatar{
 	display: inline-block;
 	width: 5rem;
 	height: 5rem;
 	border-radius: 50%;
-	border: 1px solid red;
+	border: 1px solid gray;
 	/*background-image: url("../img/1.jpg");*/
 	background-size: contain;
 	background-position: center;
@@ -31,8 +39,72 @@ body{
 	padding-left: 1rem;
 }
 
-.content-box{
+.contentBox{
+	border-bottom: 1px solid lightgray;
+	margin-bottom: 1rem;
+}
 
+.contentBox .content{
+	font-size: 2.5rem;
+	font-weight: bold;
+}
+
+.userInput{
+	/*height: 5rem;*/
+	margin-bottom: 2rem;
+	font-size: 0;
+
+	/*border: 1px solid red;*/
+	/*text-align: center;*/
+}
+
+.userInput textarea{
+	height: 100%;
+	width: 90%;
+	height: 4rem;
+	font-size: 1rem;
+	display: inline-block;
+}
+
+.userInput .sendMsg{
+	height: 4rem;
+	width: 10%;
+	display: inline-block;
+	font-size: 1.5rem;
+	/*border: 1px solid green;*/
+	vertical-align: bottom;
+	line-height: 4rem;
+	text-align: center;
+	background-color: green;
+	color: white;
+}
+
+.commentState{
+	padding-left: 5rem;
+	/*border-top: 1px solid gray;*/
+}
+
+
+.comment-avatar{
+	display: inline-block;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	border: 1px solid gray;
+	/*background-image: url("../img/1.jpg");*/
+	background-size: contain;
+	background-position: center;
+}
+
+.comment-userName{
+	display: inline-block;
+	line-height: 3rem;
+	vertical-align: bottom;
+	font-weight: bold;
+}
+
+.comment-content{
+	font-size: 2rem;
 }
 
 .avatarBox{

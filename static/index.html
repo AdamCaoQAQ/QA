@@ -48,20 +48,7 @@
 			</div>
 		</nav>
 		<div class="container" id="allMsg">
-			<!-- <section>
-				<div class="avatar"></div>
-				<span class="userName">Adam</span>
-				<div class="contentBox">
-					<p class="content">this is a test</p>
-					<span class="date">time</span>
-					<span class="ip">ip</span>
-				</div>
-				<div class="userInput">
-					<textarea name="comment" rows="8" cols="80"></textarea>
-					<div class="">回复</div>
-				</div>
-			</section> -->
-			<!-- TODO: 定义artTemplate模版 -->
+			<!-- 定义artTemplate模版 -->
 			<script type="text/html" id="myTemplate">
 				{{each data as aData}}
 					<section class="userState">
@@ -74,7 +61,7 @@
 						</div>
 						{{include "commentTemplate" aData}}
 						<div class="userInput">
-							<textarea name="comment" rows="8" cols="80"></textarea>
+							<textarea name="comment" cols="4"></textarea>
 							<div class="sendMsg">回复</div>
 						</div>
 					</section>
